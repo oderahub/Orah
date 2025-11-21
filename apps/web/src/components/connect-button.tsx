@@ -1,10 +1,14 @@
 "use client";
 
-import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
+import { useAppKit } from "@reown/appkit/react";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import { Button } from "@/components/ui/button";
 
 export function ConnectButton() {
   const [isMinipay, setIsMinipay] = useState(false);
+  const { open } = useAppKit();
+  const { address, isConnected } = useAccount();
 
   useEffect(() => {
     // @ts-ignore
@@ -13,11 +17,18 @@ export function ConnectButton() {
     }
   }, []);
 
+  // Don't show button in MiniPay as it auto-connects
   if (isMinipay) {
     return null;
   }
 
-  return <RainbowKitConnectButton />;
+  return (
+    <Button onClick={() => open()}>
+      {isConnected && address
+        ? `${address.slice(0, 6)}...${address.slice(-4)}`
+        : "Connect Wallet"}
+    </Button>
+  );
 }
 
 // Export alias for compatibility
