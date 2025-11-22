@@ -8,16 +8,20 @@ import { Button } from "@/components/ui/button";
 import { getOrahRegistryAddress } from "@/config/contracts";
 import OrahProofRegistryABI from "@/config/OrahProofRegistry.abi.json";
 import QRCode from "react-qr-code";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
+import { SelfVerification } from "@/components/self-verification";
 
 export default function RegisterPage() {
   const { address, isConnected, chain } = useAccount();
+  const [step, setStep] = useState<"verification" | "registration">("verification");
   const [batchId, setBatchId] = useState("");
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [origin, setOrigin] = useState("");
   const [producerName, setProducerName] = useState("");
-  const [selfDID, setSelfDID] = useState(""); // Will integrate with Self Protocol later
+  const [selfDID, setSelfDID] = useState("");
+  const [selfProofData, setSelfProofData] = useState<any>(null);
+  const [isVerified, setIsVerified] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registeredBatchId, setRegisteredBatchId] = useState<string | null>(null);
 
@@ -26,6 +30,17 @@ export default function RegisterPage() {
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash,
   });
+
+  const handleVerificationComplete = (did: string, proofData: any) => {
+    setSelfDID(did);
+    setSelfProofData(proofData);
+    setIsVerified(true);
+    setStep("registration");
+  };
+
+  const handleSkipVerification = () => {
+    setStep("registration");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,11 +184,43 @@ export default function RegisterPage() {
     );
   }
 
+  // Show verification step first
+  if (step === "verification") {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-2xl space-y-6">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold mb-2">Register Your Product</h1>
+          <p className="text-muted-foreground">
+            Step 1 of 2: Verify your identity (optional)
+          </p>
+        </div>
+        <SelfVerification
+          onVerificationComplete={handleVerificationComplete}
+          onSkip={handleSkipVerification}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold">Register Product Batch</h1>
+            <p className="text-sm text-muted-foreground">Step 2 of 2: Product details</p>
+          </div>
+          {isVerified && (
+            <div className="flex items-center gap-2 text-sm text-green-600">
+              <CheckCircle2 className="w-4 h-4" />
+              Identity Verified
+            </div>
+          )}
+        </div>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>Register Product Batch</CardTitle>
+          <CardTitle>Product Information</CardTitle>
           <CardDescription>
             Create an immutable proof of origin for your products on the Celo blockchain
           </CardDescription>
@@ -258,21 +305,21 @@ export default function RegisterPage() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Self Protocol DID (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={selfDID}
-                  onChange={(e) => setSelfDID(e.target.value)}
-                  placeholder="did:self:..."
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Leave empty for now. Self Protocol integration coming soon.
-                </p>
-              </div>
+              {isVerified && selfDID && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    Self Protocol DID (Verified)
+                  </label>
+                  <div className="px-3 py-2 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-xs font-mono break-all text-green-800">{selfDID}</p>
+                  </div>
+                  <p className="text-xs text-green-700 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Your identity has been verified using zero-knowledge proofs
+                  </p>
+                </div>
+              )}
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h3 className="font-medium text-sm mb-2">Registration Fee</h3>
