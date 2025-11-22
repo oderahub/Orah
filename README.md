@@ -282,7 +282,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact & Links
 
-- **Website**: [orah.app](https://orah.app)
+- **Website**: [orah.app](https:/orah-web.vercel.app)
 - **GitHub**: [@oderahub](https://github.com/oderahub)
 - **Twitter**: [@OrahProtocol](https://twitter.com/OrahProtocol)
 - **Documentation**: [Celo Docs](https://docs.celo.org/build-on-celo/build-with-self)
