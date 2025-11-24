@@ -87,24 +87,24 @@ export default function Home() {
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                   <Sparkles className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle>AI Verification</CardTitle>
+                <CardTitle>NoahAI IoT Verification</CardTitle>
                 <CardDescription>
-                  NoahAI validates IoT data and human inputs to generate authenticity proofs
+                  Rule-based AI validates sensor data to generate cryptographic authenticity proofs
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>Automated data validation</span>
+                    <span>Temperature & humidity validation</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>IoT sensor integration</span>
+                    <span>GPS location verification</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>Proof narrative generation</span>
+                    <span>SHA-256 proof hash generation</span>
                   </li>
                 </ul>
               </CardContent>

@@ -190,22 +190,43 @@ export default function VerifyPage({ params }: { params: Promise<{ batchId: stri
           )}
 
           {/* AI Verification Status */}
-          {proof.verified && proof.proofHash && (
-            <div className="space-y-2">
-              <h3 className="font-semibold text-sm">NoahAI Verification</h3>
+          <div className="space-y-2">
+            <h3 className="font-semibold text-sm">NoahAI IoT Verification</h3>
+            {proof.verified && proof.proofHash ? (
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                <p className="text-sm font-medium text-purple-900 mb-1">
-                  AI Validation Complete
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-medium text-purple-900">
+                    ✓ AI Validation Complete
+                  </p>
+                  <CheckCircle2 className="w-5 h-5 text-purple-600" />
+                </div>
+                <p className="text-xs font-mono break-all text-purple-700 mb-2">
+                  Proof Hash: {proof.proofHash}
                 </p>
-                <p className="text-xs font-mono break-all text-purple-700">
-                  Hash: {proof.proofHash}
+                <p className="text-xs text-purple-600">
+                  IoT sensor data validated using rule-based AI system
                 </p>
-                <p className="text-xs text-purple-600 mt-2">
-                  This product's origin data has been validated by NoahAI
+                <p className="text-xs text-purple-500 mt-1">
+                  Temperature, humidity, GPS, and timestamps verified
                 </p>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-medium text-yellow-900">
+                    ⏳ Pending AI Verification
+                  </p>
+                  <Loader2 className="w-5 h-5 text-yellow-600 animate-spin" />
+                </div>
+                <p className="text-xs text-yellow-700">
+                  This product has been registered but IoT data verification is pending.
+                </p>
+                <p className="text-xs text-yellow-600 mt-1">
+                  Producer needs to submit IoT sensor data for validation.
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* Blockchain Explorer Link */}
           <div className="pt-4 border-t">
