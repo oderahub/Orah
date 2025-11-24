@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { z } from 'zod';
 import { VerificationService } from '../services/verificationService';
 import { VerificationRequest } from '../types';
 import { validateApiKey, optionalApiKey, storeApiKey } from '../middleware/auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Zod schema for request validation
 const IoTDataPointSchema = z.object({

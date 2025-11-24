@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import verificationRoutes from './routes/verification';
@@ -7,7 +7,7 @@ import healthRoutes from './routes/health';
 // Load environment variables
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
