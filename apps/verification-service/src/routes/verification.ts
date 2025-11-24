@@ -2,6 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { VerificationService } from '../services/verificationService';
 import { VerificationRequest } from '../types';
+import { validateApiKey, optionalApiKey, storeApiKey } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -85,8 +86,9 @@ router.post('/submit', async (req, res, next) => {
 /**
  * POST /api/verification/submit-and-verify
  * Submit IoT data, validate, and automatically submit proof to blockchain
+ * Requires API key authentication via X-API-Key header
  */
-router.post('/submit-and-verify', async (req, res, next) => {
+router.post('/submit-and-verify', optionalApiKey, async (req, res, next) => {
   try {
     // Validate request body
     const validatedData = VerificationRequestSchema.parse(req.body);
@@ -232,7 +234,6 @@ router.get('/status/:batchId', async (req, res) => {
 /**
  * POST /api/verification/generate-api-key
  * Generate an API key for a producer
- * Note: In production, implement proper authentication and store keys in database
  */
 router.post('/generate-api-key', async (req, res) => {
   try {
@@ -248,13 +249,18 @@ router.post('/generate-api-key', async (req, res) => {
     // Import here to avoid circular dependency
     const { ProofGenerator } = await import('../utils/proofGenerator');
     const apiKey = ProofGenerator.generateApiKey(producerAddress);
+    const createdAt = new Date().toISOString();
+
+    // Store API key
+    storeApiKey(apiKey, producerAddress, createdAt);
 
     res.json({
       success: true,
       apiKey,
       producerAddress,
       message: 'Store this API key securely. It cannot be recovered.',
-      createdAt: new Date().toISOString(),
+      createdAt,
+      usage: 'Include this key in the X-API-Key header when making requests',
     });
   } catch (error) {
     res.status(500).json({
