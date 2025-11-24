@@ -179,12 +179,43 @@ export default function VerifyPage({ params }: { params: Promise<{ batchId: stri
           {/* Self Protocol Identity */}
           {proof.selfDID && !proof.selfDID.includes("temp") && (
             <div className="space-y-2">
-              <h3 className="font-semibold text-sm">Verified Identity</h3>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-sm font-mono break-all">{proof.selfDID}</p>
-                <p className="text-xs text-blue-700 mt-1">
-                  Producer identity verified via Self Protocol (Zero-Knowledge)
-                </p>
+              <h3 className="font-semibold text-lg border-b pb-2">Verified Identity</h3>
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-purple-900 mb-1">
+                      Self Protocol Verified Producer
+                    </p>
+                    <p className="text-sm text-purple-700">
+                      This producer's identity has been verified using zero-knowledge proofs
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-white/50 rounded p-2 mb-2">
+                  <p className="text-xs text-muted-foreground mb-1">Decentralized Identifier (DID)</p>
+                  <p className="text-xs font-mono break-all text-purple-800">{proof.selfDID}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-1 text-purple-700">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Age Verified</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-purple-700">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Nationality Verified</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-purple-700">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Privacy Preserved</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-purple-700">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Real Person</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
