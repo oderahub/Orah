@@ -75,19 +75,27 @@ Orah introduces a **verifiable Proof of Origin framework**:
 - Dark mode compatible
 - Accessible components
 
-### 🚧 In Progress (Milestones 2, 5)
+#### 🤖 NoahAI IoT Verification (Milestone 5)
+- ✅ Rule-based AI validation engine
+- ✅ Temperature validation (-10°C to 50°C)
+- ✅ Humidity validation (0% to 100%)
+- ✅ GPS location verification with bounds checking
+- ✅ Timestamp validation (ISO 8601, not future)
+- ✅ Data consistency checks (chronological order, location drift)
+- ✅ SHA-256 proof hash generation
+- ✅ Automated blockchain submission via `verifyProof()`
+- ✅ API key authentication for secure access
+- ✅ Real-time verification status queries
+- ✅ Frontend integration showing AI verification status
 
-#### 🤖 NoahAI Integration
-- AI verification agent for IoT data
-- Automated data validation
-- Proof narrative generation
-- Hash generation for on-chain submission
+### 🚧 In Progress (Milestone 2)
 
 #### 🚀 Production Deployment
 - Mainnet deployment pending
 - Pilot user onboarding
 - Demo video production
 - Analytics & monitoring
+- IPFS integration for metadata storage
 
 ---
 
@@ -189,7 +197,18 @@ cp apps/contracts/.env.example apps/contracts/.env
 ### Development
 
 \`\`\`bash
-# Start the development server
+# Start all development servers (frontend + verification service)
+pnpm dev
+
+# Or start individually:
+
+# Frontend only
+cd apps/web
+pnpm dev
+
+# Verification Service only
+cd apps/verification-service
+pnpm install
 pnpm dev
 
 # In another terminal, compile contracts
@@ -203,7 +222,36 @@ pnpm test
 pnpm deploy:sepolia
 \`\`\`
 
-Visit [http://localhost:3000](http://localhost:3000) to see the app.
+Visit [http://localhost:3000](http://localhost:3000) for the frontend.
+Visit [http://localhost:3001](http://localhost:3001) for the verification service.
+
+### Verification Service Setup
+
+The NoahAI verification service requires additional configuration:
+
+\`\`\`bash
+cd apps/verification-service
+
+# Copy environment template
+cp .env.example .env
+
+# Edit .env and add:
+# - BACKEND_PRIVATE_KEY (wallet that will call verifyProof)
+# - Network configuration (Sepolia by default)
+# - Contract addresses
+# - Validation rules (temperature, humidity ranges)
+
+# Start the service
+pnpm dev
+\`\`\`
+
+**API Endpoints:**
+- `GET /health` - Health check
+- `POST /api/verification/generate-api-key` - Generate API key for producer
+- `POST /api/verification/submit-and-verify` - Submit IoT data and verify on blockchain
+- `GET /api/verification/status/:batchId` - Check verification status
+
+See `apps/verification-service/README.md` for complete API documentation.
 
 ### Smart Contract Deployment
 
@@ -282,7 +330,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact & Links
 
-- **Website**: [orah.app](https://orah.app)
+- **Website**: [orah.app](https:/orah-web.vercel.app)
 - **GitHub**: [@oderahub](https://github.com/oderahub)
 - **Twitter**: [@OrahProtocol](https://twitter.com/OrahProtocol)
 - **Documentation**: [Celo Docs](https://docs.celo.org/build-on-celo/build-with-self)
